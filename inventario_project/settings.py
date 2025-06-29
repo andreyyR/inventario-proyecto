@@ -8,7 +8,8 @@ y la configuración de seguridad y autenticación.
 
 import os
 from pathlib import Path
-
+import pymysql
+pymysql.install_as_MySQLdb()
 # BASE_DIR: Define la ruta base del proyecto.
 # Se utiliza para construir rutas relativas a otros archivos del proyecto.
 BASE_DIR = Path(__file__).resolve().parent.parent
