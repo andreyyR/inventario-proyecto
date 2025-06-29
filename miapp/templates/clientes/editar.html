@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Editar Cliente{% endblock %}
+
+{% block content %}
+<!-- Contenedor principal para la página de edición de un cliente existente. -->
+<div class="container mt-5">
+    <!-- Tarjeta que envuelve el formulario de edición. -->
+    <div class="card shadow-lg border-0 rounded-3">
+        <!-- Encabezado de la tarjeta con el título y el nombre del cliente que se está editando. -->
+        <div class="card-header bg-dark text-white text-center py-3">
+            <h1 class="mb-0 display-6 fw-bold">Editar Cliente</h1>
+            <p class="lead mb-0">{{ cliente.nombre }} {{ cliente.apellido }}</p>
+        </div>
+        <!-- Cuerpo de la tarjeta que contiene el formulario. -->
+        <div class="card-body p-4">
+            <!-- Formulario de edición de cliente. -->
+            <!-- method="post": Envía los datos actualizados al servidor. -->
+            <form method="post">
+                {% csrf_token %} <!-- Token de seguridad CSRF, esencial para proteger el formulario. -->
+                <!-- Bucle para iterar sobre cada campo del formulario. -->
+                {% for field in form %}
+                <div class="mb-3">
+                    <!-- Etiqueta del campo. -->
+                    <label for="{{ field.id_for_label }}" class="form-label fw-bold">{{ field.label }}</label>
+                    <!-- Renderiza el campo del formulario (input, select, textarea, etc.). -->
+                    {{ field }}
+                    <!-- Muestra el texto de ayuda si el campo lo tiene. -->
+                    {% if field.help_text %}
+                    <div class="form-text">{{ field.help_text }}</div>
+                    {% endif %}
+                    <!-- Muestra los errores específicos de cada campo. -->
+                    {% for error in field.errors %}
+                    <div class="alert alert-danger mt-1">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+                <!-- Grupo de botones para guardar cambios o cancelar. -->
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start mt-4">
+                    <!-- Botón para enviar el formulario y guardar los cambios. -->
+                    <button type="submit" class="btn btn-primary btn-lg"><i class="bi bi-save me-2"></i>Guardar Cambios</button>
+                    <!-- Botón para cancelar la edición y volver a la página de detalle del cliente. -->
+                    <a href="{% url 'cliente_detalle' cliente.id %}" class="btn btn-secondary btn-lg"><i class="bi bi-x-circle me-2"></i>Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} 

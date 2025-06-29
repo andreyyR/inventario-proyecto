@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Registrar Nueva Venta{% endblock %}
+
+{% block content %}
+<!-- Contenedor principal para la página de registro de una nueva venta. -->
+<div class="container mt-5">
+    <!-- Tarjeta que envuelve el formulario de venta. -->
+    <div class="card shadow-lg border-0 rounded-3">
+        <!-- Encabezado de la tarjeta con el título. -->
+        <div class="card-header bg-dark text-white text-center py-3">
+            <h1 class="mb-0 display-6 fw-bold">Registrar Nueva Venta</h1>
+        </div>
+        <!-- Cuerpo de la tarjeta que contiene el formulario principal y el formset. -->
+        <div class="card-body p-4">
+            <!-- Formulario principal para la venta. -->
+            <form method="post">
+                {% csrf_token %} <!-- Token de seguridad CSRF. -->
+
+                <!-- Sección para la información general de la venta (ej. cliente). -->
+                <div class="mb-4">
+                    <h5 class="text-dark">Información General de la Venta</h5>
+                    <hr>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <!-- Campo 'cliente' del formulario principal de Venta. -->
+                            <label for="id_cliente" class="form-label">Cliente:</label>
+                            {{ form.cliente }}
+                            <!-- Muestra errores específicos del campo cliente. -->
+                            {% if form.cliente.errors %}
+                                <div class="text-danger">{{ form.cliente.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sección para los productos de la venta (Detalles de Venta) gestionados con un formset. -->
+                <div class="mb-4">
+                    <h5 class="text-dark">Productos de la Venta</h5>
+                    <hr>
+                    <!-- management_form: Campos ocultos cruciales para que Django Formsets funcione (TOTAL_FORMS, INITIAL_FORMS, MAX_NUM_FORMS). -->
+                    {{ formset.management_form }}
+                    <!-- Contenedor donde se añadirán/mostrarán los formularios de detalle de venta. -->
+                    <div id="formset-container">
+                        <!-- Bucle para renderizar los formularios de DetalleVenta existentes o iniciales. -->
+                        {% for form_detalle in formset %}
+                        <div class="card mb-3 p-3 bg-light border-0 rounded shadow-sm formset-row" data-formset-row-id="{{ forloop.counter0 }}">
+                            <div class="row g-3 align-items-end">
+                                <div class="col-md-5">
+                                    <label for="{{ form_detalle.producto.id_for_label }}" class="form-label">Producto:</label>
+                                    {{ form_detalle.producto }} <!-- Campo select para el producto. -->
+                                    {% if form_detalle.producto.errors %}
+                                        <div class="text-danger">{{ form_detalle.producto.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="{{ form_detalle.cantidad.id_for_label }}" class="form-label">Cantidad:</label>
+                                    {{ form_detalle.cantidad }} <!-- Campo para la cantidad. -->
+                                    {% if form_detalle.cantidad.errors %}
+                                        <div class="text-danger">{{ form_detalle.cantidad.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="{{ form_detalle.precio_unitario.id_for_label }}" class="form-label">Precio Unitario:</label>
+                                    {{ form_detalle.precio_unitario }} <!-- Campo para el precio unitario. -->
+                                    {% if form_detalle.precio_unitario.errors %}
+                                        <div class="text-danger">{{ form_detalle.precio_unitario.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-1">
+                                    <!-- Si el detalle ya existe en la DB (tiene PK), se muestra un checkbox para eliminarlo. -->
+                                    {% if form_detalle.instance.pk %}
+                                        {{ form_detalle.DELETE }} <!-- Checkbox oculto para marcar el detalle para eliminación. -->
+                                        <label for="{{ form_detalle.DELETE.id_for_label }}" class="form-label text-danger">Eliminar</label>
+                                    {% else %}
+                                        <!-- Para nuevos formularios (no guardados aún), un botón JavaScript para remover la fila. -->
+                                        <button type="button" class="btn btn-danger btn-sm remove-formset-row"><i class="bi bi-x-circle"></i></button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <!-- Botón para añadir un nuevo formulario de detalle de producto dinámicamente. -->
+                    <button type="button" class="btn btn-secondary mt-3" id="add-more-items"><i class="bi bi-plus-circle me-2"></i>Añadir otro producto</button>
+                </div>
+
+                <!-- Plantilla oculta (display: none) utilizada por JavaScript para clonar nuevos formularios de detalle de venta. -->
+                <!-- Contiene un formulario de DetalleVenta vacío con un marcador de posición '__prefix__' para el índice. -->
+                <div id="empty_form_template" style="display: none;">
+                    <div class="card mb-3 p-3 bg-light border-0 rounded shadow-sm formset-row">
+                        <div class="row g-3 align-items-end">
+                            <div class="col-md-5">
+                                <label for="id_detalles-__prefix__-producto" class="form-label">Producto:</label>
+                                {{ formset.empty_form.producto }}
+                            </div>
+                            <div class="col-md-3">
+                                <label for="id_detalles-__prefix__-cantidad" class="form-label">Cantidad:</label>
+                                {{ formset.empty_form.cantidad }}
+                            </div>
+                            <div class="col-md-3">
+                                <label for="id_detalles-__prefix__-precio_unitario" class="form-label">Precio Unitario:</label>
+                                {{ formset.empty_form.precio_unitario }}
+                            </div>
+                            <div class="col-md-1">
+                                <!-- Botón para eliminar filas recién añadidas (sin guardar aún). -->
+                                <button type="button" class="btn btn-danger btn-sm remove-formset-row"><i class="bi bi-x-circle"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botones de acción para el formulario completo. -->
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                    <!-- Botón para cancelar y volver a la lista de ventas. -->
+                    <a href="{% url 'ventas_lista' %}" class="btn btn-secondary me-md-2">Cancelar</a>
+                    <!-- Botón para enviar el formulario y registrar la venta. -->
+                    <button type="submit" class="btn btn-primary">Registrar Venta</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Script JavaScript para manejar la adición y eliminación dinámica de formularios de detalle de venta. -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Obtiene referencias a los elementos del DOM.
+        const addButton = document.getElementById('add-more-items');
+        const formsetContainer = document.getElementById('formset-container');
+        const totalFormsInput = document.querySelector('input[name$="TOTAL_FORMS"]'); // Campo oculto que Django usa para saber cuántos formularios hay.
+        const emptyFormTemplate = document.getElementById('empty_form_template');
+
+        // Listener para el botón 'Añadir otro producto'.
+        addButton.addEventListener('click', function() {
+            let currentForms = parseInt(totalFormsInput.value); // Obtiene el número actual de formularios.
+            // Clona la plantilla del formulario vacío.
+            const newForm = emptyFormTemplate.querySelector('.formset-row').cloneNode(true);
+
+            // Reemplaza el marcador de posición '__prefix__' con el índice correcto para los nuevos campos.
+            // Esto asegura que los nombres de los campos sean únicos y correctos para Django.
+            newForm.innerHTML = newForm.innerHTML.replace(/__prefix__/g, currentForms);
+            
+            // Limpia los valores de los nuevos campos para que aparezcan vacíos.
+            newForm.querySelectorAll('input, select, textarea').forEach(function(input) {
+                input.value = ''; 
+                if (input.type === 'checkbox') {
+                    input.checked = false;
+                }
+                // Opcional: Resetear el select de producto al primer elemento.
+                if (input.tagName === 'SELECT' && input.name.includes('producto')) {
+                    input.selectedIndex = 0; 
+                }
+            });
+
+            // Asegura que el botón de eliminar esté visible para las nuevas filas.
+            const removeButton = newForm.querySelector('.remove-formset-row');
+            if (removeButton) {
+                removeButton.style.display = 'block';
+            }
+            
+            formsetContainer.appendChild(newForm); // Añade el nuevo formulario al contenedor.
+            totalFormsInput.value = currentForms + 1; // Incrementa el contador de formularios totales.
+            attachRemoveListeners(); // Vuelve a adjuntar los listeners de eliminación para incluir la nueva fila.
+        });
+
+        // Función para adjuntar listeners a los botones de eliminación de filas.
+        function attachRemoveListeners() {
+            document.querySelectorAll('.remove-formset-row').forEach(button => {
+                button.onclick = function() {
+                    const row = button.closest('.formset-row'); // Obtiene la fila (tarjeta) del formulario.
+                    const idInput = row.querySelector('input[name$="-id"]'); // Intenta encontrar el campo ID del detalle.
+
+                    // Si el formulario ya tiene un ID (es un detalle de venta existente en la DB).
+                    if (idInput && idInput.value) {
+                        // Marcar el checkbox DELETE para que Django sepa que debe eliminar este detalle.
+                        const deleteCheckbox = row.querySelector('input[name$="-DELETE"]');
+                        if (deleteCheckbox) {
+                            deleteCheckbox.checked = true;
+                        }
+                        row.style.display = 'none'; // Oculta la fila visualmente.
+                    } else {
+                        // Si es un formulario nuevo (sin ID), simplemente lo elimina del DOM.
+                        row.remove();
+                        // Nota: No es necesario decrementar TOTAL_FORMS aquí para los formularios eliminados en el frontend.
+                        // Django maneja la consistencia con la lógica de can_delete en el backend.
+                    }
+                };
+            });
+        }
+
+        attachRemoveListeners(); // Adjunta los listeners a los formularios que se renderizan inicialmente al cargar la página.
+    });
+</script>
+{% endblock %} 

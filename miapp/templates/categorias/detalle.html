@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalle de Categoría{% endblock %}
+
+{% block content %}
+<!-- Contenedor principal para la página de detalle de categoría. -->
+<div class="container mt-5">
+    <!-- Tarjeta que envuelve todo el contenido del detalle de la categoría. -->
+    <div class="card shadow-lg border-0 rounded-3">
+        <!-- Encabezado de la tarjeta con el título y el nombre de la categoría. -->
+        <div class="card-header bg-dark text-white text-center py-3">
+            <h1 class="mb-0 display-6 fw-bold">Detalle de Categoría</h1>
+            <p class="lead mb-0">{{ categoria.nombre }}</p>
+        </div>
+        <!-- Cuerpo de la tarjeta que contiene la información detallada de la categoría. -->
+        <div class="card-body p-4">
+            <!-- Lista de detalles de la categoría. -->
+            <ul class="list-group list-group-flush mb-4">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <strong>Nombre:</strong>
+                    <span>{{ categoria.nombre }}</span>
+                </li>
+                <!-- Muestra la descripción solo si existe. -->
+                {% if categoria.descripcion %}
+                <li class="list-group-item">
+                    <strong>Descripción:</strong><br>
+                    <p class="text-muted mt-2">{{ categoria.descripcion }}</p>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+        <!-- Pie de página de la tarjeta con botones de navegación y acción. -->
+        <div class="card-footer bg-light border-top-0 d-flex justify-content-between align-items-center p-4">
+            <!-- Botón para volver a la lista de categorías. -->
+            <a href="{% url 'categorias_lista' %}" class="btn btn-secondary"><i class="bi bi-arrow-left me-2"></i>Volver a la lista</a>
+            <!-- Grupo de botones de acción (editar y eliminar), solo visibles para administradores. -->
+            <div class="btn-group" role="group" aria-label="Acciones de Categoría">
+                {% if user.is_staff %}
+                <a href="{% url 'categoria_editar' categoria.id %}" class="btn btn-warning"><i class="bi bi-pencil-fill me-2"></i>Editar</a>
+                <a href="{% url 'categoria_eliminar' categoria.id %}" class="btn btn-danger"><i class="bi bi-trash-fill me-2"></i>Eliminar</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

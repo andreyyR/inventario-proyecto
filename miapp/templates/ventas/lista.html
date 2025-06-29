@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Ventas{% endblock %}
+
+{% block content %}
+<!-- Contenedor principal para la página de lista de ventas. -->
+<div class="container mt-4">
+    <h1 class="mb-4 display-5 fw-bold text-dark">Lista de Ventas</h1>
+
+    <!-- Condición para mostrar la tabla de ventas solo si hay ventas registradas. -->
+    {% if ventas %}
+    <div class="table-responsive">
+        <!-- Tabla para mostrar las ventas. -->
+        <table class="table table-hover table-striped shadow-sm rounded overflow-hidden">
+            <thead class="bg-dark text-white">
+                <tr>
+                    <th scope="col">ID Venta</th>
+                    <th scope="col">Cliente</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Vendedor</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Bucle para iterar sobre cada venta en la lista. -->
+                {% for venta in ventas %}
+                <tr>
+                    <td>{{ venta.id }}</td>
+                    <td>{{ venta.cliente.nombre }}</td>
+                    <td>{{ venta.fecha_venta|date:"Y-m-d H:i" }}</td> <!-- Formatea la fecha y hora. -->
+                    <td>₡{{ venta.get_total|floatformat:2 }}</td> <!-- Muestra el total de la venta con el símbolo de colones y 2 decimales. -->
+                    <td>{{ venta.vendedor.username }}</td>
+                    <td>
+                        <!-- Enlace para ver los detalles de una venta específica. -->
+                        <a href="{% url 'venta_detalle' venta.id %}" class="btn btn-info btn-sm">Ver Detalles</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <!-- Mensaje si no hay ventas registradas. -->
+    <div class="alert alert-info text-center" role="alert">
+        No hay ventas registradas.
+    </div>
+    {% endif %}
+
+    <!-- Botón para registrar una nueva venta, solo visible para usuarios administradores. -->
+    {% if user.is_staff %}
+    <div class="mt-5 text-center">
+        <a href="{% url 'venta_crear' %}" class="btn btn-success btn-lg">Registrar Nueva Venta</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %} 

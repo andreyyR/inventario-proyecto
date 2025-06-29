@@ -1,0 +1,188 @@
+/* style.css: Este archivo contiene los estilos CSS personalizados para el sistema de inventario, implementando un diseño minimalista y monocromático. */
+
+/* Estilos Generales del Cuerpo (body) */
+body {
+    font-family: 'Roboto', sans-serif; /* Fuente principal para el texto. */
+    background-color: #f0f2f5; /* Gris muy claro para el fondo de la página, proporcionando un aspecto limpio. */
+    color: #333; /* Gris oscuro para el color del texto principal, asegurando legibilidad. */
+}
+
+/* Estilos de la Barra de Navegación (Navbar) */
+.navbar {
+    background-color: #212529; /* Carbón oscuro para el fondo de la barra de navegación. */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Sombra sutil para darle profundidad. */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Borde inferior ligero. */
+}
+
+.navbar-brand {
+    color: #f8f9fa !important; /* Blanco apagado para el texto de la marca (nombre del sistema). */
+    font-weight: 700; /* Texto en negrita para la marca. */
+}
+
+.navbar-nav .nav-link {
+    color: #ced4da !important; /* Gris más claro para los enlaces de navegación. */
+    transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out; /* Transición suave para efectos hover. */
+    border-radius: 0.3rem; /* Bordes ligeramente redondeados para los enlaces. */
+    padding: 0.5rem 0.8rem; /* Espaciado interno para los enlaces. */
+}
+
+.navbar-nav .nav-link:hover {
+    color: #ffffff !important; /* Blanco en el hover. */
+    background-color: rgba(255, 255, 255, 0.08); /* Ligero resaltado en el hover. */
+}
+
+/* Espaciado del Contenedor Principal */
+.container.mt-4 {
+    margin-top: 3rem !important; /* Margen superior incrementado para el contenido principal, separándolo de la barra de navegación. */
+}
+
+/* Estilos de Tarjetas (para listas y detalles de elementos como productos, categorías, clientes) */
+.card {
+    border: 1px solid #e0e0e0; /* Borde gris claro. */
+    border-radius: 0.75rem; /* Bordes redondeados. */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06); /* Sombra suave y difusa. */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Transición para efectos hover. */
+    background-color: #ffffff; /* Fondo blanco para las tarjetas. */
+}
+
+.card:hover {
+    transform: translateY(-3px); /* Pequeño levantamiento en el hover para un efecto interactivo. */
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1); /* Sombra ligeramente más prominente en el hover. */
+}
+
+.card-header {
+    background-color: #f8f9fa; /* Fondo gris claro para el encabezado de la tarjeta. */
+    border-bottom: 1px solid #e9ecef; /* Borde inferior del encabezado. */
+    color: #343a40; /* Color del texto del encabezado. */
+    font-weight: 600; /* Texto en negrita. */
+    border-top-left-radius: 0.7rem; /* Redondeado superior izquierdo. */
+    border-top-right-radius: 0.7rem; /* Redondeado superior derecho. */
+}
+
+.card-title {
+    color: #212529; /* Carbón oscuro para los títulos dentro de las tarjetas. */
+    font-weight: 600; /* Texto en negrita. */
+    margin-bottom: 0.75rem; /* Margen inferior. */
+}
+
+.card-text strong {
+    color: #495057; /* Gris ligeramente más oscuro para el texto en negrita. */
+}
+
+.card-img-top {
+    border-top-left-radius: 0.75rem; /* Redondeado superior izquierdo para la imagen. */
+    border-top-right-radius: 0.75rem; /* Redondeado superior derecho para la imagen. */
+    height: 220px; /* Altura fija para las imágenes. */
+    object-fit: cover; /* Asegura que la imagen cubra el área sin distorsionarse. */
+    border-bottom: 1px solid #eee; /* Borde inferior para separar la imagen del cuerpo de la tarjeta. */
+}
+
+/* Estilos de Botones - Estilo Monocromático */
+.btn {
+    border-radius: 0.3rem; /* Bordes ligeramente más pequeños para un aspecto minimalista. */
+    font-weight: 500; /* Peso de la fuente. */
+    transition: all 0.2s ease-in-out; /* Transición suave para efectos hover. */
+    text-transform: uppercase; /* Opcional: texto en mayúsculas para un look moderno. */
+    letter-spacing: 0.5px; /* Espaciado entre letras. */
+}
+
+/* Aplicación del color base monocromático a todos los botones de Bootstrap. */
+.btn-primary, .btn-success, .btn-info, .btn-warning, .btn-danger, .btn-secondary {
+    background-color: #495057; /* Gris oscuro general para todos los botones. */
+    border-color: #495057; /* Borde del mismo color. */
+    color: #ffffff; /* Texto blanco en los botones. */
+}
+
+/* Efecto hover para los botones. */
+.btn-primary:hover, .btn-success:hover, .btn-info:hover, .btn-warning:hover, .btn-danger:hover, .btn-secondary:hover {
+    background-color: #343a40; /* Gris más oscuro en el hover. */
+    border-color: #343a40; /* Borde del mismo color en el hover. */
+    color: #ffffff; /* Texto blanco en el hover. */
+}
+
+/* Sobreescritura Específica de Botones (Opcional, para una distinción sutil si es necesario) */
+/* Si se desea que algunos botones tengan un toque de color, se pueden descomentar y ajustar. */
+/* .btn-primary { background-color: #212529; border-color: #212529; } */
+/* .btn-primary:hover { background-color: #000000; border-color: #000000; } */
+/* .btn-danger { background-color: #dc3545; border-color: #dc3545; } */
+/* .btn-danger:hover { background-color: #c82333; border-color: #bd2130; } */
+
+/* Estilos de Formularios */
+.form-label {
+    font-weight: 600; /* Etiquetas de formulario en negrita. */
+    color: #333; /* Color de texto para las etiquetas. */
+    margin-bottom: 0.5rem; /* Margen inferior. */
+}
+
+.form-control {
+    border-radius: 0.3rem; /* Bordes redondeados consistentes. */
+    border: 1px solid #ced4da; /* Borde gris claro. */
+    padding: 0.8rem 1rem; /* Relleno interno. */
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05); /* Sombra interna sutil. */
+    font-size: 1rem; /* Tamaño de fuente. */
+    line-height: 1.5; /* Altura de línea. */
+}
+
+.form-control:focus {
+    border-color: #a0a0a0; /* Borde gris en el enfoque. */
+    box-shadow: 0 0 0 0.25rem rgba(120, 120, 120, 0.25); /* Sombra gris sutil en el enfoque. */
+}
+
+/* Estilos de Mensajes (Alertas) */
+.alert {
+    border-radius: 0.3rem; /* Bordes redondeados. */
+    padding: 1rem 1.25rem; /* Relleno interno. */
+    margin-bottom: 1.5rem; /* Margen inferior. */
+    border: none; /* Sin borde para un aspecto más limpio. */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil. */
+}
+
+/* Colores de fondo y texto para diferentes tipos de alertas. */
+.alert-info {
+    background-color: #e9f0f5;
+    color: #343a40;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Estilos Personalizados para Tablas (ej. en inicio.html, listas) */
+.table {
+    border-radius: 0.75rem; /* Bordes redondeados para la tabla. */
+    overflow: hidden; /* Oculta el contenido que se desborda para mantener el redondeado. */
+    border: 1px solid #e9ecef; /* Borde ligero para la tabla. */
+}
+
+.table thead {
+    background-color: #e9ecef; /* Gris claro para los encabezados de tabla. */
+    color: #343a40; /* Color de texto para los encabezados. */
+}
+
+.table th, .table td {
+    padding: 1rem; /* Relleno para celdas de tabla. */
+    vertical-align: middle; /* Alineación vertical. */
+    border-top: 1px solid #e9ecef; /* Borde superior para celdas. */
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none; /* Elimina el borde inferior de la última fila. */
+}
+
+/* Ajustes Responsivos */
+@media (max-width: 768px) {
+    .card {
+        margin-bottom: 1.5rem; /* Margen inferior para tarjetas en pantallas pequeñas. */
+    }
+} 

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Crear Producto{% endblock %}
+
+{% block content %}
+<!-- Contenedor principal para la página de creación de un nuevo producto. -->
+<div class="container mt-4">
+    <h2>Crear Nuevo Producto</h2>
+    <!-- Formulario para la creación de un producto. -->
+    <!-- method="post": Envía los datos del formulario al servidor. -->
+    <!-- enctype="multipart/form-data": Necesario para permitir la subida de archivos (imágenes). -->
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %} <!-- Token de seguridad CSRF, esencial para proteger el formulario. -->
+        <!-- {{ form.as_p }}: Renderiza todos los campos del formulario como párrafos (<p>). -->
+        <!-- Esto es una forma rápida de mostrar el formulario sin necesidad de iterar campo por campo. -->
+        {{ form.as_p }}
+        <!-- Botón para enviar el formulario y guardar el producto. -->
+        <button type="submit" class="btn btn-primary">Guardar Producto</button>
+        <!-- Botón para cancelar la operación y volver a la lista de productos. -->
+        <a href="{% url 'productos_lista' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %} 

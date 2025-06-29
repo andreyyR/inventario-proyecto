@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalle de Venta{% endblock %}
+
+{% block content %}
+<!-- Contenedor principal para la página de detalle de venta. -->
+<div class="container mt-5">
+    <!-- Tarjeta que envuelve todo el contenido del detalle de la venta. -->
+    <div class="card shadow-lg border-0 rounded-3">
+        <!-- Encabezado de la tarjeta con el ID de la venta y el cliente asociado. -->
+        <div class="card-header bg-dark text-white text-center py-3">
+            <h1 class="mb-0 display-6 fw-bold">Detalle de Venta #{{ venta.id }}</h1>
+            <p class="lead mb-0">Cliente: {{ venta.cliente.nombre }}</p>
+        </div>
+        <!-- Cuerpo de la tarjeta que contiene la información de la venta y los productos. -->
+        <div class="card-body p-4">
+            <div class="row mb-4">
+                <!-- Columna para la información general de la venta. -->
+                <div class="col-md-6">
+                    <h5 class="text-dark mb-3">Información de la Venta</h5>
+                    <!-- Lista de detalles de la venta (fecha, vendedor, cliente, email, teléfono). -->
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <strong>Fecha de Venta:</strong>
+                            <span>{{ venta.fecha_venta|date:"d/m/Y H:i" }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <strong>Vendedor:</strong>
+                            <span>{{ venta.vendedor.username }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <strong>Cliente:</strong>
+                            <span><a href="{% url 'cliente_detalle' venta.cliente.id %}" class="text-decoration-none">{{ venta.cliente.nombre }}</a></span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <strong>Email Cliente:</strong>
+                            <span>{{ venta.cliente.email }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <strong>Teléfono Cliente:</strong>
+                            <span>{{ venta.cliente.telefono }}</span>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Columna para los productos incluidos en la venta. -->
+                <div class="col-md-6">
+                    <h5 class="text-dark mb-3">Productos de la Venta</h5>
+                    <!-- Condición para mostrar la tabla de detalles de venta solo si hay productos. -->
+                    {% if detalles %}
+                    <div class="table-responsive">
+                        <!-- Tabla para mostrar los detalles de los productos de la venta. -->
+                        <table class="table table-bordered table-sm">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio Unitario</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Bucle para iterar sobre cada detalle de venta. -->
+                                {% for detalle in detalles %}
+                                <tr>
+                                    <td><a href="{% url 'producto_detalle' detalle.producto.id %}" class="text-decoration-none">{{ detalle.producto.nombre }}</a></td>
+                                    <td>{{ detalle.cantidad }}</td>
+                                    <td>₡{{ detalle.precio_unitario|floatformat:2 }}</td> <!-- Muestra el precio unitario con formato de colones. -->
+                                    <td>₡{{ detalle.get_subtotal|floatformat:2 }}</td> <!-- Muestra el subtotal con formato de colones. -->
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="3" class="text-end">Total de la Venta:</th>
+                                    <th>₡{{ venta.get_total|floatformat:2 }}</th> <!-- Muestra el total final de la venta. -->
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-muted">No hay productos registrados para esta venta.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <!-- Pie de página de la tarjeta con el botón para volver a la lista de ventas. -->
+        <div class="card-footer bg-light border-top-0 d-flex justify-content-between align-items-center p-4">
+            <a href="{% url 'ventas_lista' %}" class="btn btn-secondary"><i class="bi bi-arrow-left me-2"></i>Volver a la lista de ventas</a>
+            {% comment %}
+            // Opcional: Botones de editar y eliminar si se implementan (actualmente comentados)
+            <div class="btn-group" role="group">
+                <a href="{% url 'venta_editar' venta.id %}" class="btn btn-warning"><i class="bi bi-pencil-fill me-2"></i>Editar</a>
+                <a href="{% url 'venta_eliminar' venta.id %}" class="btn btn-danger"><i class="bi bi-trash-fill me-2"></i>Eliminar</a>
+            </div>
+            {% endcomment %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

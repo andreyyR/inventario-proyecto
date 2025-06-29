@@ -1,0 +1,29 @@
+<!-- panel_admin.html: Esta plantilla es un panel de control simple para usuarios administradores. -->
+<!-- Muestra un mensaje de bienvenida y enlaces directos a las secciones de gestión. -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Administrador</title>
+</head>
+<body>
+    <!-- Mensaje de bienvenida personalizado para el administrador. -->
+    <h1>Bienvenido, {{ user.username }} (Administrador)</h1>
+    <!-- Sección de navegación con enlaces a diferentes áreas de gestión. -->
+    <nav>
+        <ul>
+            <!-- Enlace para gestionar productos. -->
+            <li><a href="/productos/">Gestionar Productos</a></li>
+            <!-- Enlace para gestionar categorías. -->
+            <li><a href="/categorias/">Gestionar Categorías</a></li>
+            <!-- Enlace para gestionar clientes. -->
+            <li><a href="/clientes/">Gestionar Clientes</a></li>
+            <!-- Enlace directo al panel de administración de Django. -->
+            <li><a href="/admin/">Panel Django Admin</a></li>
+            <!-- Enlace para cerrar la sesión. -->
+            <li><a href="/logout/">Cerrar sesión</a></li>
+        </ul>
+    </nav>
+    <p>Este es tu panel de administrador. Aquí puedes gestionar toda la información del sistema.</p>
+</body>
+</html> 

@@ -1,0 +1,27 @@
+<!-- panel_usuario.html: Esta plantilla es un panel de control simple para usuarios regulares. -->
+<!-- Muestra un mensaje de bienvenida y enlaces de solo lectura a las secciones relevantes. -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Usuario</title>
+</head>
+<body>
+    <!-- Mensaje de bienvenida personalizado para el usuario regular. -->
+    <h1>Bienvenido, {{ user.username }} (Usuario)</h1>
+    <!-- Sección de navegación con enlaces a diferentes áreas de visualización. -->
+    <nav>
+        <ul>
+            <!-- Enlace para ver productos (solo lectura). -->
+            <li><a href="/productos/">Ver Productos</a></li>
+            <!-- Enlace para ver categorías (solo lectura). -->
+            <li><a href="/categorias/">Ver Categorías</a></li>
+            <!-- Enlace para ver clientes (solo lectura, aunque en un escenario real un usuario normal no debería ver clientes). -->
+            <li><a href="/clientes/">Ver Clientes</a></li>
+            <!-- Enlace para cerrar la sesión. -->
+            <li><a href="/logout/">Cerrar sesión</a></li>
+        </ul>
+    </nav>
+    <p>Este es tu panel de usuario. Aquí puedes ver información relevante según tu rol.</p>
+</body>
+</html> 

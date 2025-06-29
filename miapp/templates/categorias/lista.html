@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Categorías{% endblock %}
+
+{% block content %}
+<!-- Contenedor principal para la página de lista de categorías. -->
+<div class="container mt-4">
+    <h1 class="mb-4 display-5 fw-bold text-dark">Lista de Categorías</h1>
+    
+    <!-- Fila que contiene las tarjetas de categorías. -->
+    <div class="row g-4">
+        <!-- Bucle para iterar sobre cada categoría en la lista. -->
+        {% for categoria in categorias %}
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <!-- Tarjeta individual para cada categoría. -->
+            <div class="card h-100 shadow-sm">
+                <!-- Cuerpo de la tarjeta con la información de la categoría y acciones. -->
+                <div class="card-body d-flex flex-column">
+                    <!-- Título de la categoría, que es un enlace a su página de detalle. -->
+                    <h5 class="card-title"><a href="{% url 'categoria_detalle' categoria.id %}" class="text-decoration-none">{{ categoria.nombre }}</a></h5>
+                    <!-- Descripción de la categoría. -->
+                    <p class="card-text flex-grow-1">{{ categoria.descripcion }}</p>
+                    <!-- Grupo de botones de acción para la categoría. -->
+                    <div class="mt-auto">
+                        <div class="btn-group w-100" role="group" aria-label="Acciones de Categoría">
+                            <a href="{% url 'categoria_detalle' categoria.id %}" class="btn btn-info btn-sm">Ver Detalles</a>
+                            <!-- Botones de edición y eliminación, solo visibles para usuarios administradores. -->
+                            {% if user.is_staff %}
+                            <a href="{% url 'categoria_editar' categoria.id %}" class="btn btn-warning btn-sm">Editar</a>
+                            <a href="{% url 'categoria_eliminar' categoria.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <!-- Mensaje si no hay categorías disponibles. -->
+        <div class="col-12">
+            <div class="alert alert-info text-center" role="alert">
+                No hay categorías disponibles.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Botón para agregar una nueva categoría, solo visible para usuarios administradores. -->
+    {% if user.is_staff %}
+    <div class="mt-5 text-center">
+        <a href="{% url 'categoria_crear' %}" class="btn btn-success btn-lg">Agregar Nueva Categoría</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %} 

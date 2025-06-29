@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Crear Categoría{% endblock %}
+
+{% block content %}
+<!-- Contenedor principal para la página de creación de una nueva categoría. -->
+<div class="container mt-4">
+    <h2>Crear Nueva Categoría</h2>
+    <!-- Formulario para la creación de una categoría. -->
+    <!-- method="post": Envía los datos del formulario al servidor. -->
+    <form method="post">
+        {% csrf_token %} <!-- Token de seguridad CSRF, esencial para proteger el formulario. -->
+        <!-- {{ form.as_p }}: Renderiza todos los campos del formulario como párrafos (<p>). -->
+        <!-- Esto es una forma rápida de mostrar el formulario sin necesidad de iterar campo por campo. -->
+        {{ form.as_p }}
+        <!-- Botón para enviar el formulario y guardar la categoría. -->
+        <button type="submit" class="btn btn-primary">Guardar Categoría</button>
+        <!-- Botón para cancelar la operación y volver a la lista de categorías. -->
+        <a href="{% url 'categorias_lista' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %} 

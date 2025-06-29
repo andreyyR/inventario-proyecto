@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Productos{% endblock %}
+
+{% block content %}
+<!-- Contenedor principal para la página de lista de productos. -->
+<div class="container mt-4">
+    <h1 class="mb-4 display-5 fw-bold text-dark">Lista de Productos</h1>
+    
+    <!-- Fila que contiene las tarjetas de productos. -->
+    <div class="row g-4">
+        <!-- Bucle para iterar sobre cada producto en la lista. -->
+        {% for producto in productos %}
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <!-- Tarjeta individual para cada producto. -->
+            <div class="card h-100 shadow-sm">
+                <!-- Muestra la imagen del producto si existe. -->
+                {% if producto.imagen %}
+                <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}">
+                {% endif %}
+                <!-- Cuerpo de la tarjeta con la información del producto y acciones. -->
+                <div class="card-body d-flex flex-column">
+                    <!-- Título del producto, que es un enlace a su página de detalle. -->
+                    <h5 class="card-title"><a href="{% url 'producto_detalle' producto.id %}" class="text-decoration-none">{{ producto.nombre }}</a></h5>
+                    <!-- Detalles del producto: categoría, precio y stock. -->
+                    <p class="card-text flex-grow-1">
+                        <strong>Categoría:</strong> {{ producto.categoria.nombre }}<br>
+                        <strong>Precio:</strong> ₡{{ producto.precio }}<br>
+                        <strong>Stock:</strong> {{ producto.stock }}
+                    </p>
+                    <!-- Grupo de botones de acción para el producto. -->
+                    <div class="mt-auto">
+                        <div class="btn-group w-100" role="group" aria-label="Acciones de Producto">
+                            <a href="{% url 'producto_detalle' producto.id %}" class="btn btn-info btn-sm">Ver Detalles</a>
+                            <!-- Botones de edición y eliminación, solo visibles para usuarios administradores. -->
+                            {% if user.is_staff %}
+                            <a href="{% url 'producto_editar' producto.id %}" class="btn btn-warning btn-sm">Editar</a>
+                            <a href="{% url 'producto_eliminar' producto.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <!-- Mensaje si no hay productos disponibles. -->
+        <div class="col-12">
+            <div class="alert alert-info text-center" role="alert">
+                No hay productos disponibles.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Botón para agregar un nuevo producto, solo visible para usuarios administradores. -->
+    {% if user.is_staff %}
+    <div class="mt-5 text-center">
+        <a href="{% url 'producto_crear' %}" class="btn btn-success btn-lg">Agregar Nuevo Producto</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %} 

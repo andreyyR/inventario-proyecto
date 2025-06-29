@@ -1,0 +1,103 @@
+{% load static %}
+<!-- base.html: Esta es la plantilla base de la que extienden todas las demás plantillas. -->
+<!-- Contiene la estructura HTML fundamental, la barra de navegación, inclusión de CSS y JavaScript, y bloques de contenido para ser sobrescritos. -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bloque para el título de la página. Cada plantilla que extiende de base.html puede definir su propio título. -->
+    <title>{% block title %}Sistema de Inventario{% endblock %}</title>
+    <!-- Inclusión de Bootstrap CSS para estilos predefinidos y responsivos. -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Inclusión de Bootstrap Icons para iconos. -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <!-- Inclusión de nuestro archivo CSS personalizado para estilos específicos del proyecto. -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <!-- Barra de navegación principal del sitio, utilizando componentes de Bootstrap. -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <!-- Enlace al inicio del sistema con el logo/nombre de la aplicación. -->
+            <a class="navbar-brand" href="{% url 'inicio' %}">Sistema de Inventario</a>
+            <!-- Botón para el menú de navegación en dispositivos móviles. -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Contenido del menú de navegación. -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <!-- Enlaces de navegación principales. -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'productos_lista' %}">Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'categorias_lista' %}">Categorías</a>
+                    </li>
+                    <!-- Condición para mostrar enlaces solo si el usuario es administrador (is_staff). -->
+                    {% if user.is_staff %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'clientes_lista' %}">Clientes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'ventas_lista' %}">Ventas</a>
+                    </li>
+                    {% endif %}
+                    <!-- Enlace para registrar ventas, solo visible para administradores. -->
+                    {% if user.is_staff %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'venta_crear' %}">Registrar Venta</a>
+                    </li>
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav">
+                    <!-- Condición para mostrar opciones de usuario autenticado o no autenticado. -->
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <!-- Muestra el nombre de usuario si está autenticado. -->
+                            <span class="nav-link">Bienvenido, {{ user.username }}</span>
+                        </li>
+                        <li class="nav-item">
+                            <!-- Formulario para cerrar sesión (requiere POST y token CSRF). -->
+                            <form method="post" action="{% url 'logout' %}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-link nav-link">Cerrar Sesión</button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <!-- Enlaces para iniciar sesión o registrarse si el usuario no está autenticado. -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">Iniciar Sesión</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'registro' %}">Registrarse</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenedor principal para el contenido de la página. -->
+    <div class="container mt-4">
+        <!-- Sección para mostrar mensajes del sistema (éxito, error, etc.) utilizando el framework de mensajes de Django. -->
+        {% if messages %}
+            {% for message in messages %}
+                <!-- Cada mensaje se muestra como una alerta de Bootstrap, con un botón para cerrarla. -->
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Bloque principal de contenido. Las plantillas hijas sobrescribirán este bloque. -->
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- Inclusión de Bootstrap JavaScript para funcionalidades interactivas (ej. navbar, alertas). -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

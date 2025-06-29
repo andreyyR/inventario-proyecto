@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Detalle de Producto{% endblock %}
+
+{% block content %}
+<!-- Contenedor principal para la página de detalle de producto. -->
+<div class="container mt-5">
+    <!-- Tarjeta que envuelve todo el contenido del detalle del producto. -->
+    <div class="card shadow-lg border-0 rounded-3">
+        <!-- Encabezado de la tarjeta con el título y el nombre del producto. -->
+        <div class="card-header bg-dark text-white text-center py-3">
+            <h1 class="mb-0 display-6 fw-bold">Detalle de Producto</h1>
+            <p class="lead mb-0">{{ producto.nombre }}</p>
+        </div>
+        <!-- Cuerpo de la tarjeta que contiene la imagen y los detalles del producto. -->
+        <div class="card-body p-4">
+            <div class="row">
+                <!-- Columna para la imagen del producto. -->
+                <div class="col-md-6 text-center mb-3 mb-md-0">
+                    <!-- Muestra la imagen del producto si existe, de lo contrario, muestra una imagen de placeholder. -->
+                    {% if producto.imagen %}
+                    <img src="{{ producto.imagen.url }}" class="img-fluid rounded shadow-sm" alt="{{ producto.nombre }}" style="max-height: 350px; object-fit: cover;">
+                    {% else %}
+                    <img src="{% static 'img/placeholder.png' %}" class="img-fluid rounded shadow-sm" alt="No hay imagen" style="max-height: 350px; object-fit: cover;">
+                    {% endif %}
+                </div>
+                <!-- Columna para la información detallada del producto. -->
+                <div class="col-md-6">
+                    <!-- Lista de detalles del producto. -->
+                    <ul class="list-group list-group-flush mb-4">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <strong>Nombre:</strong>
+                            <span>{{ producto.nombre }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <strong>Categoría:</strong>
+                            <span>{{ producto.categoria.nombre }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <strong>Precio:</strong>
+                            <span>₡{{ producto.precio }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <strong>Stock:</strong>
+                            <span>{{ producto.stock }}</span>
+                        </li>
+                        <!-- Muestra la descripción solo si existe. -->
+                        {% if producto.descripcion %}
+                        <li class="list-group-item">
+                            <strong>Descripción:</strong><br>
+                            <p class="text-muted mt-2">{{ producto.descripcion }}</p>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Pie de página de la tarjeta con botones de navegación y acción. -->
+        <div class="card-footer bg-light border-top-0 d-flex justify-content-between align-items-center p-4">
+            <!-- Botón para volver a la lista de productos. -->
+            <a href="{% url 'productos_lista' %}" class="btn btn-secondary"><i class="bi bi-arrow-left me-2"></i>Volver a la lista</a>
+            <!-- Grupo de botones de acción (editar y eliminar), solo visibles para administradores. -->
+            <div class="btn-group" role="group" aria-label="Acciones de Producto">
+                {% if user.is_staff %}
+                <a href="{% url 'producto_editar' producto.id %}" class="btn btn-warning"><i class="bi bi-pencil-fill me-2"></i>Editar</a>
+                <a href="{% url 'producto_eliminar' producto.id %}" class="btn btn-danger"><i class="bi bi-trash-fill me-2"></i>Eliminar</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

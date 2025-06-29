@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Clientes{% endblock %}
+
+{% block content %}
+<!-- Contenedor principal para la página de lista de clientes. -->
+<div class="container mt-4">
+    <h1 class="mb-4 display-5 fw-bold text-dark">Lista de Clientes</h1>
+    
+    <!-- Fila que contiene las tarjetas de clientes. -->
+    <div class="row g-4">
+        <!-- Bucle para iterar sobre cada cliente en la lista. -->
+        {% for cliente in clientes %}
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <!-- Tarjeta individual para cada cliente. -->
+            <div class="card h-100 shadow-sm">
+                <!-- Cuerpo de la tarjeta con la información del cliente y acciones. -->
+                <div class="card-body d-flex flex-column">
+                    <!-- Título del cliente, que es un enlace a su página de detalle. -->
+                    <h5 class="card-title"><a href="{% url 'cliente_detalle' cliente.id %}" class="text-decoration-none">{{ cliente.nombre }} {{ cliente.apellido }}</a></h5>
+                    <!-- Detalles del cliente: email, teléfono y dirección. -->
+                    <p class="card-text flex-grow-1">
+                        <strong>Email:</strong> {{ cliente.email }}<br>
+                        <strong>Teléfono:</strong> {{ cliente.telefono }}<br>
+                        <strong>Dirección:</strong> {{ cliente.direccion }}
+                    </p>
+                    <!-- Grupo de botones de acción para el cliente. -->
+                    <div class="mt-auto">
+                        <div class="btn-group w-100" role="group" aria-label="Acciones de Cliente">
+                            <a href="{% url 'cliente_detalle' cliente.id %}" class="btn btn-info btn-sm">Ver Detalles</a>
+                            <!-- Botones de edición y eliminación, solo visibles para usuarios administradores. -->
+                            {% if user.is_staff %}
+                            <a href="{% url 'cliente_editar' cliente.id %}" class="btn btn-warning btn-sm">Editar</a>
+                            <a href="{% url 'cliente_eliminar' cliente.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <!-- Mensaje si no hay clientes registrados. -->
+        <div class="col-12">
+            <div class="alert alert-info text-center" role="alert">
+                No hay clientes registrados.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Botón para agregar un nuevo cliente, solo visible para usuarios administradores. -->
+    {% if user.is_staff %}
+    <div class="mt-5 text-center">
+        <a href="{% url 'cliente_crear' %}" class="btn btn-success btn-lg">Agregar Nuevo Cliente</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %} 
